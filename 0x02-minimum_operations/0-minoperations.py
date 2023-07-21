@@ -1,30 +1,19 @@
+#!/usr/bin/python3
+'''
+calculates the minimum number of operations required
+to create a specific number of characters.
+Assumes that there are only two operations available:
+copying all characters and pasting them
+'''
+
+
 def minOperations(n):
-  """
-  Calculates the fewest number of operations needed to result in exactly n H characters in the file.
+    k = 0
+    m = 2
 
-  Args:
-    n: The number of H characters to be achieved.
-
-  Returns:
-    The fewest number of operations needed.
-  """
-
-  if n <= 1:
-    return 0
-
-  operations = 0
-  current = 1
-  while current < n:
-    if current * 2 <= n:
-      current *= 2
-      operations += 1
-    else:
-      current += 1
-      operations += 1
-
-  return operations
-
-
-if __name__ == "__main__":
-  print(minOperations(9))
-
+    while n > 1:
+        while n % m == 0:
+            k += m
+            n /= m
+        m += 1
+    return k
