@@ -1,25 +1,29 @@
 #!/usr/bin/node
 
-const request = require('request');
-// getting the film value from the terminal
-const os = process.argv[2];
+const movieId = process.argv[2];
+const movieEndpoint = 'https://swapi-api.alx-tools.com/api/films/' + movieId;
 
-const url = `https://swapi-api.alx-tools.com/api/films/${os}`;
-
-request(url, (err, res) => {
-  if (err) {
-    console.log(err);
+function sendRequest (characterList, index) {
+  if (characterList.length === index) {
+    return;
   }
-  const character = JSON.parse(res.body).characters;
 
-  for (let i = 0; i < character.length; i++) {
-    request(character[i], (err, res) => {
-      if (err) {
-        console.log(err);
-      }
+  request(characterList[index], (error, response, body) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(JSON.parse(body).name);
+      sendRequest(characterList, index + 1);
+    }
+  });
+}
 
-      const chars = JSON.parse(res.body);
-      console.log(chars.name);
-    });
+request(movieEndpoint, (error, response, body) => {
+  if (error) {
+    console.log(error);
+  } else {
+    const characterList = JSON.parse(body).characters;
+
+    sendRequest(characterList, 0);
   }
 });
